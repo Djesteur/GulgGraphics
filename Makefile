@@ -1,8 +1,9 @@
 FMODARCHI = x86_64
 CXX       = g++
 CXXFLAGS  = -g -std=c++2a -Wextra -Wall -pedantic
-LDFLAGS   = -L ../Gulg/Bin/Static -l$(LIBNAME)  -L ExternalLibraries/SFML/lib -lsfml-graphics -lsfml-window  -lsfml-system 
-#LDFLAGS   = -L ./Libraries/GLFW/ -L ./Libraries/Vulkan/ -lvulkan -lglfw3 -lGL -lX11 -lpthread -ldl
+LIBRARIES = -L ../Gulg/Bin/Static -l$(LIBNAME) $(SFMLLIBRARIES) $(OTHERLIBRARIES)
+SFMLLIBRARIES = -L ExternalLibraries/SFML/lib -lsfml-graphics-s-d -lsfml-window-s-d -lsfml-system-s-d
+OTHERLIBRARIES = -lpthread -lGL -lX11 -lXrandr -lfreetype -lGLEW -lopenal -ludev
 
 SRCFOLDER = Sources
 INCFOLDER = Includes
@@ -43,14 +44,14 @@ ERRSTRING  = $(LREDCOLOR)[ERROR]$(ENDCOLOR)
 all: $(OBJ)
 	@printf "$(LGREENCOLOR)Compilation done$(ENDCOLOR)\\n"
 	@printf "$(LGREENCOLOR)Linking $(ENDCOLOR)$(LYELLOWCOLOR)$^$(ENDCOLOR)\\n"
-	@$(CXX) $^ -o $(EXEFOLDER)/$(EXENAME) $(LDFLAGS)
+	@$(CXX) $^ -o $(EXEFOLDER)/$(EXENAME) $(LIBRARIES)
 	@printf "$(LGREENCOLOR)Linking done$(ENDCOLOR)\\n"
 	@printf "$(LGREENCOLOR)Executable created at path: $(ENDCOLOR)$(LREDCOLOR)$(EXEFOLDER)/$(EXENAME)$(ENDCOLOR)\\n"
 
 $(OBJFOLDER)/%.o: $(SRCFOLDER)/%.cpp
 	@mkdir -p $(DIRECTORIES)
 	@printf "$(LGREENCOLOR)Compiling:  $(ENDCOLOR)$(LCYANCOLOR)$<$(ENDCOLOR)\\n"
-	@-$(CXX) $(CXXFLAGS) -fPIC -c $< -o $@ -I $(INCFOLDER) -I ../Gulg/Includes/ 
+	@-$(CXX) $(CXXFLAGS) -fPIC -c $< -o $@ -I $(INCFOLDER) -I ../Gulg/Includes/ -I ./ExternalLibraries/SFML/include/
 
 
 clean:
